@@ -1,12 +1,13 @@
 from typing import Tuple
 
 import pygame
+import time
 
 pygame.init()
 
 # Custom tools
-size_of_window = 1000  # не больше размера экрана
-number_of_cell = 50  # не больше 50
+size_of_window = 400  # не больше размера экрана
+number_of_cell = 3  # не больше 50
 thickness: int = 2  # 2 или 3 по вкусу
 margin = 30  # не больше чем size_of_window
 
@@ -92,20 +93,47 @@ def draw_circle():
     pygame.draw.circle(screen, (0, 0, 255), (x, y), size_of_windowCell // 2 - thickness, thickness)
 
 
+def end_game():
+    time.sleep(2)
+    quit()
+
+
 while is_work:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_work = False
         elif event.type == pygame.MOUSEBUTTONUP:
+            type_arr = [[] for _ in range(number_of_cell)]
+
             if move:
                 pos = pygame.mouse.get_pos()
                 draw_cross()
+                pygame.display.flip()
+                for index, el in enumerate(field):
+                    type_arr[index // number_of_cell].append(el)
+                for els in type_arr:
+                    x = 0
+                    for el in els:
+                        if el.lower() == 'x':
+                            x += 1
+                    if x == number_of_cell:
+                        print('Победил X')
+                        end_game()
                 move = not move
-                print(field)
             elif not move:
                 pos = pygame.mouse.get_pos()
                 draw_circle()
+                pygame.display.flip()
+                for index, el in enumerate(field):
+                    type_arr[index // number_of_cell].append(el)
+                for els in type_arr:
+                    o = 0
+                    for el in els:
+                        if el.lower() == 'o':
+                            o += 1
+                    if o == number_of_cell:
+                        print('Победил O')
+                        end_game()
                 move = not move
-                print(field)
     pygame.display.flip()
 pygame.quit()
