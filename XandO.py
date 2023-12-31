@@ -104,36 +104,21 @@ while is_work:
             is_work = False
         elif event.type == pygame.MOUSEBUTTONUP:
             type_arr = [[] for _ in range(number_of_cell)]
-
             if move:
                 pos = pygame.mouse.get_pos()
                 draw_cross()
                 pygame.display.flip()
-                for index, el in enumerate(field):
-                    type_arr[index // number_of_cell].append(el)
-                for els in type_arr:
-                    x = 0
-                    for el in els:
-                        if el.lower() == 'x':
-                            x += 1
-                    if x == number_of_cell:
-                        print('Победил X')
-                        end_game()
                 move = not move
             elif not move:
                 pos = pygame.mouse.get_pos()
                 draw_circle()
                 pygame.display.flip()
-                for index, el in enumerate(field):
-                    type_arr[index // number_of_cell].append(el)
-                for els in type_arr:
-                    o = 0
-                    for el in els:
-                        if el.lower() == 'o':
-                            o += 1
-                    if o == number_of_cell:
-                        print('Победил O')
-                        end_game()
                 move = not move
+            for index, el in enumerate(field):
+                type_arr[index // number_of_cell].append(el)
+            for arr in type_arr:
+                if len(set(arr)) == 1 and arr[0] != '':
+                    print(f'Победил {arr[0]}')
+                    end_game()
     pygame.display.flip()
 pygame.quit()
