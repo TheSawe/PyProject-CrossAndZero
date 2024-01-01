@@ -103,7 +103,8 @@ while is_work:
         if event.type == pygame.QUIT:
             is_work = False
         elif event.type == pygame.MOUSEBUTTONUP:
-            type_arr = [[] for _ in range(number_of_cell)]
+            horizontal_lines = [[] for _ in range(number_of_cell)]
+            vertical_lines = [[] for _ in range(number_of_cell)]
             if move:
                 pos = pygame.mouse.get_pos()
                 draw_cross()
@@ -115,8 +116,14 @@ while is_work:
                 pygame.display.flip()
                 move = not move
             for index, el in enumerate(field):
-                type_arr[index // number_of_cell].append(el)
-            for arr in type_arr:
+                horizontal_lines[index // number_of_cell].append(el)
+            for index, el in enumerate(field):
+                vertical_lines[index % number_of_cell].append(el)
+            for arr in horizontal_lines:
+                if len(set(arr)) == 1 and arr[0] != '':
+                    print(f'Победил {arr[0]}')
+                    end_game()
+            for arr in vertical_lines:
                 if len(set(arr)) == 1 and arr[0] != '':
                     print(f'Победил {arr[0]}')
                     end_game()
