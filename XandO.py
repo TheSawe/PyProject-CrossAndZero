@@ -2,19 +2,26 @@ from typing import Tuple
 
 import pygame
 import time
+from tkinter import *
 
 pygame.init()
+root = Tk()
+
+monitor_height = root.winfo_screenheight()
+monitor_width = root.winfo_screenwidth()
 
 # Custom tools
-size_of_window = 400  # не больше размера экрана
+size_of_window = 1080  # не больше размера экрана
 number_of_cell = 3  # не больше 50
-thickness: int = 2  # 2 или 3 по вкусу
+thickness: int = 3  # 2 или 3 по вкусу
 margin = 30  # не больше чем size_of_window
 
-if size_of_window // margin <= 2.5 or number_of_cell > 50 or thickness not in [2, 3]:
-    print('No way you don\'t listen to my instruction')
+if size_of_window > min(monitor_width, monitor_height) or number_of_cell > 50 or thickness not in [2, 3]:
+    print('Your settings will crash my project! Try to change settings\' values and try again :)')
     exit()
 
+top_field_of_window_size = 50
+size_of_window = size_of_window - top_field_of_window_size
 screen = pygame.display.set_mode((size_of_window, size_of_window))
 is_work = True
 move = True
@@ -127,5 +134,8 @@ while is_work:
                 if len(set(arr)) == 1 and arr[0] != '':
                     print(f'Победил {arr[0]}')
                     end_game()
+            if field.count('') == 0:
+                print('Ничья!')
+                end_game()
     pygame.display.flip()
 pygame.quit()
