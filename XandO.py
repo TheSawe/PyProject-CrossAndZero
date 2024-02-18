@@ -12,7 +12,7 @@ monitor_width = root.winfo_screenwidth()
 
 # Custom tools
 size_of_window = 1080  # не больше размера экрана
-number_of_cell = 3  # не больше 50
+number_of_cell = 5  # не больше 50
 thickness: int = 3  # 2 или 3 по вкусу
 margin = 30  # не больше чем size_of_window
 
@@ -20,13 +20,22 @@ if size_of_window > min(monitor_width, monitor_height) or number_of_cell > 50 or
     print('Your settings will crash my project! Try to change settings\' values and try again :)')
     exit()
 
+sequence = {x: 3 for x in range(3, 6)}
+for x in range(6, 51):
+    if x > 9:
+        sequence[x] = 5
+        continue
+    sequence[x] = 4
+
 top_field_of_window_size = 50
 size_of_window = size_of_window - top_field_of_window_size
 screen = pygame.display.set_mode((size_of_window, size_of_window))
+
 is_work = True
 move = True
-field = ['' for x in range(number_of_cell * number_of_cell)]
 
+field = ['' for x in range(number_of_cell * number_of_cell)]
+sequence_to_win = sequence[number_of_cell]
 size_of_windowCell = (size_of_window - margin * 2) / number_of_cell
 
 pygame.draw.rect(screen, (255, 255, 255),
@@ -110,8 +119,6 @@ while is_work:
         if event.type == pygame.QUIT:
             is_work = False
         elif event.type == pygame.MOUSEBUTTONUP:
-            horizontal_lines = [[] for _ in range(number_of_cell)]
-            vertical_lines = [[] for _ in range(number_of_cell)]
             if move:
                 pos = pygame.mouse.get_pos()
                 draw_cross()
@@ -122,20 +129,5 @@ while is_work:
                 draw_circle()
                 pygame.display.flip()
                 move = not move
-            for index, el in enumerate(field):
-                horizontal_lines[index // number_of_cell].append(el)
-            for index, el in enumerate(field):
-                vertical_lines[index % number_of_cell].append(el)
-            for arr in horizontal_lines:
-                if len(set(arr)) == 1 and arr[0] != '':
-                    print(f'Победил {arr[0]}')
-                    end_game()
-            for arr in vertical_lines:
-                if len(set(arr)) == 1 and arr[0] != '':
-                    print(f'Победил {arr[0]}')
-                    end_game()
-            if field.count('') == 0:
-                print('Ничья!')
-                end_game()
     pygame.display.flip()
 pygame.quit()
